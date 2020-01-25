@@ -1,0 +1,26 @@
+baseURL = "https://chrsm.org/"
+languageCode = "en-us"
+title = "chrsm.org"
+canonifyurls = true
+theme = "black-and-light"
+staticDir = ["static"]
+paginate = 8
+
+[permalinks]
+    posts = "/:year/:month/:day/:slug/"
+
+[[menu.main]]
+    name = "~/about"
+    url = "/about"
+
+[[menu.main]]
+    name = "~/"
+    url = "/"
+
+[[menu.main]]
+    name = "~/github"
+    url = "https://github.com/chrsm"
+
+[params]
+    description = "The blog of Christopher Martinez, a software developer from Fresno."
+    disableWebFonts = true
