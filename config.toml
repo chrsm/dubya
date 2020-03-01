@@ -5,6 +5,7 @@ canonifyurls = true
 theme = "black-and-light"
 staticDir = ["static"]
 paginate = 8
+disableHugoGeneratorInject = true
 
 [permalinks]
     posts = "/:year/:month/:day/:slug/"

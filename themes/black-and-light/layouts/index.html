@@ -1,12 +1,12 @@
 {{ partial "header.html" . }}
 
-<section id=content>
-  <ul class=posts_listing>
-    {{ range .Pages }}
+<section id="content">
+  <ul class="posts_listing">
+    {{ range where .Site.RegularPages "Section" "posts" }}
       <li>
         <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-        <div id=date>
-          <time>{{ .Date.Format (.Site.Params.dateform | default "January 2006") }}</time>
+        <div class="date">
+          {{ .Date.Format (.Site.Params.dateform | default "2006-01-02") }}
         </div>
       </li>
     {{ end }}
