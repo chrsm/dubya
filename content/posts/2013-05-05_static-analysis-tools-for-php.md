@@ -1,5 +1,5 @@
 ---
-title: "Static analysis tools for PHP"
+title: "[archive] Static analysis tools for PHP"
 description: ""
 date: "2013-05-05"
 indexes: [ "post" ]
