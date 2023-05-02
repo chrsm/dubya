@@ -1,0 +1,100 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer"><meta name=description content="The blog of Christopher Martinez, a software developer from Fresno."><title>Experimenting w/building a game: Part 3 - LFS, Maps</title><link rel=canonical href=https://chrsm.org/2021/07/25/experimenting-w/building-a-game-part-3-lfs-maps/><style>*{border:0;font:inherit;font-size:100%;vertical-align:baseline;margin:0;padding:0;color:#000;text-decoration-skip:ink}body{font-family:open sans,myriad pro,Myriad,sans-serif;font-size:17px;line-height:160%;color:#1d1313;max-width:700px;margin:auto}p{margin:20px 0}a img{border:none}img{margin:10px auto;max-width:100%;display:block}.left-justify{float:left}.right-justify{float:right}pre,code{font:12px Consolas,liberation mono,Menlo,Courier,monospace;background-color:#f7f7f7}code{font-size:12px;padding:4px}pre{margin-top:0;margin-bottom:16px;word-wrap:normal;padding:16px;overflow:auto;font-size:85%;line-height:1.45}pre>code{padding:0;margin:0;font-size:100%;word-break:normal;white-space:pre;background:0 0;border:0}pre code{display:inline;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}pre code::before,pre code::after{content:normal}em,q,em,dfn{font-style:italic}.sans,html .gist .gist-file .gist-meta{font-family:open sans,myriad pro,Myriad,sans-serif}.mono,pre,code,tt,p code,li code{font-family:Menlo,Monaco,andale mono,lucida console,courier new,monospace}.heading,.serif,h1,h2,h3{font-family:old standard tt,serif}strong{font-weight:600}q:before{content:"\201C"}q:after{content:"\201D"}del,s{text-decoration:line-through}blockquote{font-family:old standard tt,serif;text-align:center;padding:50px}blockquote p{display:inline-block;font-style:italic}blockquote:before,blockquote:after{font-family:old standard tt,serif;content:'\201C';font-size:35px;color:#403c3b}blockquote:after{content:'\201D'}hr{width:40%;height:1px;background:#403c3b;margin:25px auto}h1{font-size:35px}h2{font-size:28px}h3{font-size:22px;margin-top:18px}h1 a,h2 a,h3 a{text-decoration:none}h1,h2{margin-top:28px}#sub-header,.date{color:#403c3b;font-size:13px}#sub-header{margin:0 4px}#nav h1 a{font-size:35px;color:#1d1313;line-height:120%}.posts_listing a,#nav a{text-decoration:none}li{margin-left:20px}ul li{margin-left:5px}ul li{list-style-type:none}ul li:before{content:"\00BB \0020"}#nav ul li:before,.posts_listing li:before{content:'';margin-right:0}#content{text-align:left;width:100%;font-size:15px;padding:60px 0 80px}#content h1,#content h2{margin-bottom:5px}#content h2{font-size:25px}#content .entry-content{margin-top:15px}#content .date{margin-left:3px}#content h1{font-size:30px}.highlight{margin:10px 0}.posts_listing{margin:0 0 50px}.posts_listing li{margin:0 0 25px 15px}.posts_listing li a:hover,#nav a:hover{text-decoration:underline}#nav{text-align:center;position:static;margin-top:60px}#nav ul{display:table;margin:8px auto 0}#nav li{list-style-type:none;display:table-cell;font-size:15px;padding:0 20px}#links{margin:50px 0 0}#links :nth-child(2){float:right}#not-found{text-align:center}#not-found a{font-family:old standard tt,serif;font-size:200px;text-decoration:none;display:inline-block;padding-top:225px}@media(max-width:750px){body{padding-left:20px;padding-right:20px}#nav h1 a{font-size:28px}#nav li{font-size:13px;padding:0 15px}#content{margin-top:0;padding-top:50px;font-size:14px}#content h1{font-size:25px}#content h2{font-size:22px}.posts_listing li div{font-size:12px}}@media(max-width:400px){body{padding-left:20px;padding-right:20px}#nav h1 a{font-size:22px}#nav li{font-size:12px;padding:0 10px}#content{margin-top:0;padding-top:20px;font-size:12px}#content h1{font-size:20px}#content h2{font-size:18px}.posts_listing li div{font-size:12px}}*,#nav h1 a{color:#fdfdfd}body{background:#121212}pre,code{background-color:#262626}#sub-header,.date{color:#bababa}hr{background:#ebebeb}:root{--darkreader-neutral-background:#181a1b;--darkreader-neutral-text:#e8e6e3;--darkreader-selection-background:#004daa;--darkreader-selection-text:#e8e6e3}html{background-color:#181a1b!important}html,body,input,textarea,select,button{background-color:#181a1b}html,body,input,textarea,select,button{border-color:#736b5e;color:#e8e6e3}a{color:#3391ff}table{border-color:#545b5e}::placeholder{color:#b2aba1}input:-webkit-autofill,textarea:-webkit-autofill,select:-webkit-autofill{background-color:#555b00!important;color:#e8e6e3!important}::-webkit-scrollbar{background-color:#202324;color:#aba499}::-webkit-scrollbar-thumb{background-color:#454a4d}::-webkit-scrollbar-thumb:hover{background-color:#575e62}::-webkit-scrollbar-thumb:active{background-color:#484e51}::-webkit-scrollbar-corner{background-color:#181a1b}*{scrollbar-color:#202324 #454a4d}::selection{background-color:#004daa!important;color:#e8e6e3!important}::-moz-selection{background-color:#004daa!important;color:#e8e6e3!important}</style></head><body><section id=nav><h1><a href=https://chrsm.org/></a></h1><ul><li><a href=https://chrsm.org/>~/</a></li><li><a href=https://chrsm.org/about>~/about</a></li><li><a href=https://github.com/chrsm>~/github</a></li></ul></section><section id=content><h1>Experimenting w/building a game: Part 3 - LFS, Maps</h1><div id=sub-header>July 2021 · 7 minute read</div><div class=entry-content><p>I took a break from working on a game for several months. Work has kept me
+incredibly busy, as I have transitioned from a sr. engineer over to an engineer
+<em>manager</em>. I write a lot less code for work nowadays, but thankfully I will
+always have side projects!</p><p><a href=https://love2d.org>Last time I talked about LOVE2D</a>, I explained how I was managing non-git
+dependencies. Today, I&rsquo;ll be touching on two topics: asset storage and maps.</p><p>Considering there has not been a whole lot of LOVE2D-specific content, I&rsquo;ve
+decided to change the post-group prefix from here on out.</p><h3 id=assets>Assets</h3><p>I&rsquo;ve decided to take a really simple approach while working on this game. A lot
+of art is from <a href=https://opengameart.org/>OpenGameArt</a>. Most of it is static, and won&rsquo;t change, but
+in the process of hacking everything together, I&rsquo;ve often cut/copied things out
+into new files or scaled versions of sprites.</p><p>Additionally, as much as possible, I try to track a bit of metadata about the
+source - license, original source page, etc - so that if anything ends up
+getting shipped, all artists involved can be properly credited.</p><p>This means there are a lot of &ldquo;source&rdquo; files - zips, etc - as well as unpacked
+versions, modified sprites, you name it.</p><p>At the moment, the total set of just the art assets rolls in about 100MB.</p><p>Git can totally handle this, but since this is me spending time doing
+&ldquo;interesting&rdquo; things, I decided to look into using <a href=https://git-lfs.github.com/><code>git-lfs</code></a>.
+Additionally, it allows me to have a CI pipeline for <em>code</em> that doesn&rsquo;t need
+to pull down 100MB of assets as it won&rsquo;t touch them.</p><p>I definitely wanted to self-host rather than use a paid provider. Thankfully,
+there is a reference implementation of a <a href=https://github.com/git-lfs/lfs-test-server>git-lfs server</a> that works well
+enough for now.</p><p>If I were to have multiple people working on this, I&rsquo;d probably go for a paid
+provider - support, less maintenance, as well as not having to expose it to
+the internet.</p><p>I shoved the reference server in a docker container and exposed it over my VPN:</p><pre tabindex=0><code>FROM golang:1.15-alpine
+
+ENV LFS_LISTEN tcp://6983
+ENV LFS_HOST 0.0.0.0:6983
+ENV LFS_METADB /data/lfs.db
+ENV LFS_CONTENTPATH /data/files
+ENV LFS_SCHEME http
+# for obvious reasons, change this
+ENV LFS_ADMINUSER admin
+ENV LFS_ADMINPASS admin_password
+
+RUN apk --update add git &amp;&amp; \
+    rm -rf /var/cache/apk &amp;&amp; \
+    go get github.com/git-lfs/lfs-test-server &amp;&amp; \
+    go install github.com/git-lfs/lfs-test-server
+
+VOLUME /data
+EXPOSE 6983
+
+CMD $GOPATH/bin/lfs-test-server
+</code></pre><p>Once this was up and running, the git repository needed a bit of configuration.</p><p><code>.git/config</code></p><pre tabindex=0><code>[lfs]
+	url = https://internal.vpn.url
+[lfs &#34;https://internal.vpn.url&#34;]
+	locksverify = false
+	access = basic
+</code></pre><p>Finally, <code>.gitattributes</code> in the root of the repo needed to know what files
+need to be LFS&rsquo;d instead of actually committed to the repo.</p><pre tabindex=0><code>*.png filter=lfs diff=lfs merge=lfs -text
+*.tsx filter=lfs diff=lfs merge=lfs -text
+*.pkg filter=lfs diff=lfs merge=lfs -text
+src/assets/maps/* filter=lfs diff=lfs merge=lfs -text
+# etc
+</code></pre><p>From now on, what actually gets checked into the repo is a tiny file like this:</p><pre tabindex=0><code>version https://git-lfs.github.com/spec/v1
+oid sha256:long-hash
+size N
+</code></pre><h3 id=maps>Maps</h3><p>After looking into many tile-based map editors, I finally settled on <a href=https://mapeditor.org>Tiled</a>.
+It&rsquo;s a fantastic editor and incredibly easy to use. It supports exporting to
+a number of formats, including the one I was most interested in: lua.</p><p>There&rsquo;s already a library called <a href=https://github.com/karai17/Simple-Tiled-Implementation>STI</a> that handles the representation
+dumped into the lua file, which was incredibly helpful in getting something
+working.</p><p><img src=https://chrsm.org/img/20210725_tiled.png alt=img></p><p>Putting this together was really easy - it was just up to my imagination.
+One neat thing is that it has this concept of &ldquo;object layers&rdquo;, which I&rsquo;ve
+used for the following:</p><ul><li>collision markers</li><li>&ldquo;event&rdquo; triggers: teleports, area transitions, etc</li><li>marking NPC/player spawn areas</li><li>marking static routes that some NPCs will take</li></ul><h4 id=collision-detection>Collision detection</h4><p>Collision markers were the most obvious in the beginning to me. Given that a
+majority of the map consists of tiled images, how would the game know that
+you couldn&rsquo;t walk into a tree or the water? Perhaps there&rsquo;s a Smart(TM) way
+to express that, but as a complete newcomer to designing these kinds of things,
+I decided to actually outline things that you can&rsquo;t step on by using Tiled&rsquo;s
+object editors and rectangles.</p><p><img src=https://chrsm.org/img/20210725_tiled-collision.png alt=img2></p><p>For collision detection, I used one of STI&rsquo;s plugins for a library called <a href=https://github.com/kikito/bump.lua>bump</a>.
+In order for bump to know what objects are collidable, you need to add a
+<code>colldable</code> property to each region. This is simple enough with Tiled&rsquo;s object
+types, which can automatically insert properties for you if you select the
+type.</p><p>Anyway, as you can see from image, an entity - NPC or player - shouldn&rsquo;t be able
+to walk off the map, into the wall, or into that nicely placed fence. Not only
+would that make no sense (maybe if you&rsquo;re Spider-man), but because they&rsquo;re a
+part of a layer underneath the entity, it wouldn&rsquo;t look quite right. The layer
+with the fence would be drawn before the entity and thus would always have said
+entity drawn over it - not what we want. Making it impossible for that to
+happen is preferable in my opinion.</p><p><em>Side note: for the entity layer, I added a faux z-index concept by using the
+entity&rsquo;s y-index to decide what needs to be drawn.</em></p><p>With bump in place, whenever an entity is moved, a call to <code>bump:move</code> should
+occur. Bump will tell you where an entity actually ended up, given the properties
+of said entity.</p><h3 id=on-entities>On entities&mldr;</h3><p>While this kind of collision detection works in most cases, I have objects on
+the map that I don&rsquo;t want to completely block off. I want the player to be able
+to walk up to them and be drawn in front of it or vice-versa. Vendors, lamps,
+and things of that sort.</p><p>Ideally these objects would be single objects, but of course they have to be
+drawn tile-by-tile - and suffer from the same issue of being on a different
+layer and thus being subject to the issue of being drawn prior to the player
+(or after, depending on where the entity layer is).</p><p>It seems entirely possible to add some kind of &ldquo;interactable&rdquo; property to each
+tile, but for simplicity&rsquo;s sake I opted to do the following:</p><ul><li>copy the object in its entirety from the sheet it belongs to</li><li>save a new image</li><li>create an in-game entity type for &ldquo;static&rdquo; objects</li><li>ahead-of-time parse the map and pluck out static objects</li><li>generate a lua file containing definitions and position for each object</li></ul><p>Thus these predefined entities exist in the editor, but are not rendered
+on-screen as-is. They&rsquo;re loaded like any other entity and belong to the same
+layer that NPCs and the player belongs to, allowing for the faux z-index
+to render in the proper order given an entity&rsquo;s position.</p><p>It probably isn&rsquo;t the most efficient way to do things, but it works!</p><p><em>Note: I plan on writing a tool to create an atlas out of sprites that are
+handled this way so that mostly single-large images can be used as a source
+for any given map. Far off for now.</em></p><p>In order to parse the map, I found a library called <a href=https://github.com/lafriks/go-tiled>go-tiled</a>, a very
+close to full-featured parser for Tiled&rsquo;s <code>.tmx</code> files. I pass a map path
+and layer name to the tool and it plucks out <code>static_object</code>s from said layer
+and generates lua code specific to my &ldquo;engine&rdquo; so that it can add those as
+entities in the world when it&rsquo;s loaded. This also handles generating code for
+NPCs and &ldquo;AI paths&rdquo; that are predefined.</p><h3 id=wq>;wq</h3><p>I&rsquo;m still enjoying exploring this space and learning new things along the way.
+Naturally, I expect that using a Real Engine(TM) would actually allow me to
+build a <em>game</em> quicker, but it has been fun to build everything from scratch.
+There are so many things I don&rsquo;t know, and hacking, reading, watching videos
+from gamedevs has been incredibly eye-opening into the world that gamedevs
+operate in.</p></div><div id=links><a class="basic-alignment left" href=https://chrsm.org/2020/08/24/experimenting-with-love2d-part-2-dependencies/>&#171; Experimenting with LOVE2D: Part 2 (Dependencies)</a>
+<a class="basic-alignment left" href=https://chrsm.org/2021/08/06/experimenting-w/gamedev-part-4-behavior-system/>Experimenting w/gamedev: Part 4 - Behavior System &#187;</a></div></section></body></html>

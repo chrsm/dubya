@@ -1,0 +1,218 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer"><meta name=description content="The blog of Christopher Martinez, a software developer from Fresno."><title>Go: small tips, advice, and some gotchas</title><link rel=canonical href=https://chrsm.org/2019/08/27/go-small-tips-advice-and-some-gotchas/><style>*{border:0;font:inherit;font-size:100%;vertical-align:baseline;margin:0;padding:0;color:#000;text-decoration-skip:ink}body{font-family:open sans,myriad pro,Myriad,sans-serif;font-size:17px;line-height:160%;color:#1d1313;max-width:700px;margin:auto}p{margin:20px 0}a img{border:none}img{margin:10px auto;max-width:100%;display:block}.left-justify{float:left}.right-justify{float:right}pre,code{font:12px Consolas,liberation mono,Menlo,Courier,monospace;background-color:#f7f7f7}code{font-size:12px;padding:4px}pre{margin-top:0;margin-bottom:16px;word-wrap:normal;padding:16px;overflow:auto;font-size:85%;line-height:1.45}pre>code{padding:0;margin:0;font-size:100%;word-break:normal;white-space:pre;background:0 0;border:0}pre code{display:inline;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}pre code::before,pre code::after{content:normal}em,q,em,dfn{font-style:italic}.sans,html .gist .gist-file .gist-meta{font-family:open sans,myriad pro,Myriad,sans-serif}.mono,pre,code,tt,p code,li code{font-family:Menlo,Monaco,andale mono,lucida console,courier new,monospace}.heading,.serif,h1,h2,h3{font-family:old standard tt,serif}strong{font-weight:600}q:before{content:"\201C"}q:after{content:"\201D"}del,s{text-decoration:line-through}blockquote{font-family:old standard tt,serif;text-align:center;padding:50px}blockquote p{display:inline-block;font-style:italic}blockquote:before,blockquote:after{font-family:old standard tt,serif;content:'\201C';font-size:35px;color:#403c3b}blockquote:after{content:'\201D'}hr{width:40%;height:1px;background:#403c3b;margin:25px auto}h1{font-size:35px}h2{font-size:28px}h3{font-size:22px;margin-top:18px}h1 a,h2 a,h3 a{text-decoration:none}h1,h2{margin-top:28px}#sub-header,.date{color:#403c3b;font-size:13px}#sub-header{margin:0 4px}#nav h1 a{font-size:35px;color:#1d1313;line-height:120%}.posts_listing a,#nav a{text-decoration:none}li{margin-left:20px}ul li{margin-left:5px}ul li{list-style-type:none}ul li:before{content:"\00BB \0020"}#nav ul li:before,.posts_listing li:before{content:'';margin-right:0}#content{text-align:left;width:100%;font-size:15px;padding:60px 0 80px}#content h1,#content h2{margin-bottom:5px}#content h2{font-size:25px}#content .entry-content{margin-top:15px}#content .date{margin-left:3px}#content h1{font-size:30px}.highlight{margin:10px 0}.posts_listing{margin:0 0 50px}.posts_listing li{margin:0 0 25px 15px}.posts_listing li a:hover,#nav a:hover{text-decoration:underline}#nav{text-align:center;position:static;margin-top:60px}#nav ul{display:table;margin:8px auto 0}#nav li{list-style-type:none;display:table-cell;font-size:15px;padding:0 20px}#links{margin:50px 0 0}#links :nth-child(2){float:right}#not-found{text-align:center}#not-found a{font-family:old standard tt,serif;font-size:200px;text-decoration:none;display:inline-block;padding-top:225px}@media(max-width:750px){body{padding-left:20px;padding-right:20px}#nav h1 a{font-size:28px}#nav li{font-size:13px;padding:0 15px}#content{margin-top:0;padding-top:50px;font-size:14px}#content h1{font-size:25px}#content h2{font-size:22px}.posts_listing li div{font-size:12px}}@media(max-width:400px){body{padding-left:20px;padding-right:20px}#nav h1 a{font-size:22px}#nav li{font-size:12px;padding:0 10px}#content{margin-top:0;padding-top:20px;font-size:12px}#content h1{font-size:20px}#content h2{font-size:18px}.posts_listing li div{font-size:12px}}*,#nav h1 a{color:#fdfdfd}body{background:#121212}pre,code{background-color:#262626}#sub-header,.date{color:#bababa}hr{background:#ebebeb}:root{--darkreader-neutral-background:#181a1b;--darkreader-neutral-text:#e8e6e3;--darkreader-selection-background:#004daa;--darkreader-selection-text:#e8e6e3}html{background-color:#181a1b!important}html,body,input,textarea,select,button{background-color:#181a1b}html,body,input,textarea,select,button{border-color:#736b5e;color:#e8e6e3}a{color:#3391ff}table{border-color:#545b5e}::placeholder{color:#b2aba1}input:-webkit-autofill,textarea:-webkit-autofill,select:-webkit-autofill{background-color:#555b00!important;color:#e8e6e3!important}::-webkit-scrollbar{background-color:#202324;color:#aba499}::-webkit-scrollbar-thumb{background-color:#454a4d}::-webkit-scrollbar-thumb:hover{background-color:#575e62}::-webkit-scrollbar-thumb:active{background-color:#484e51}::-webkit-scrollbar-corner{background-color:#181a1b}*{scrollbar-color:#202324 #454a4d}::selection{background-color:#004daa!important;color:#e8e6e3!important}::-moz-selection{background-color:#004daa!important;color:#e8e6e3!important}</style></head><body><section id=nav><h1><a href=https://chrsm.org/></a></h1><ul><li><a href=https://chrsm.org/>~/</a></li><li><a href=https://chrsm.org/about>~/about</a></li><li><a href=https://github.com/chrsm>~/github</a></li></ul></section><section id=content><h1>Go: small tips, advice, and some gotchas</h1><div id=sub-header>August 2019 · 11 minute read</div><div class=entry-content><p>Go is a very easy language to learn and quickly become productive with.
+As with any language, though, lack of experience can easily make even the
+simplest of code hard to maintain.</p><p>This post is intended to help with:</p><ul><li>common mistakes</li><li>mechanics of certain builtins</li><li>do-s and don&rsquo;t-s</li></ul><p>I will not pretend to be an expert nor a 10xer ninja. Feel free to correct me
+if I make any silly claims or am wrong. Email&rsquo;s obvious - c @.</p><h3 id=gofmt-urself>gofmt urself</h3><p>Just format your code. Add a Go plugin for your editor that supports formatting on save.</p><p>Extra credit for using gofmt&rsquo;s better looking cousin, <a href=https://github.com/mvdan/gofumpt>gofumpt</a>.</p><p>I mean, this is obvious. It&rsquo;s pointed out in the tour. Definitely one of the
+benefits of writing Go is that we all have the same style.</p><h3 id=a-word-on-concurrency>A word on concurrency</h3><p>One of Go&rsquo;s biggest selling points is the built-in mechanisms for concurrency
+and synchronization. The implementation isn&rsquo;t revolutionary, but it is simpler
+to <em>use</em> than many other languages and much less resource heavy.
+&mldr;but while it may be simpler to use, it isn&rsquo;t necessarily easier to use correctly.</p><p>It might go without saying, but first and foremost: if what you&rsquo;re authoring
+can be considered a &ldquo;library&rdquo;: don&rsquo;t use concurrency in it. Allow callers
+as much control as possible. If the problem space naturally fits, go for it,
+but always allow the caller to control what the callees are doing.</p><p>For &ldquo;user&rdquo; code, I tend to take a cautionary approach:</p><p>I believe that the best way to write concurrent code is to start out with
+synchronous code. Once the desired behaviour has been implemented, finding
+parts of the flow that can actually <em>benefit</em> from concurrent execution
+is much simpler.</p><p>There is a balance to be struck: will making 5 http calls, synchronously, make
+parts of your software slow? Sure.
+What about making 5 http calls asynchronously? Can you handle these occurring
+hundreds of times a second? Maybe</p><p>As unfortunate as it is to resort to saying something incredibly generic:
+use your best judgement. Not everything needs to be done at the same time,
+and some things naturally rely on some kind of if-then that don&rsquo;t even make
+sense to do concurrently.</p><p>Examples of this could be a post all by itself, so I&rsquo;ll defer any until I have
+time to write something up.</p><h3 id=make>make</h3><p><code>make</code> is a builtin that handles creation of maps, channels, and slices.
+It is not like <code>new</code> - <code>make(T)</code> is not valid code.</p><p><code>make</code> actually initializes the &ldquo;builtin&rdquo; type - not the <code>T</code>, but the builtin of <code>T</code>
+(<code>map[T]T2</code>, <code>chan T</code>, <code>[]T</code>). That is:</p><ul><li><code>make(map[T]T2)</code> initializes the <em>map</em></li><li><code>make(chan T)</code> initializes the <em>chan</em></li><li><code>make([]T, len, cap)</code> initializes the <em>slice</em>, elements and backing array</li><li><code>make([]*T, len, cap)</code> initializes the <em>slice</em> and backing array for pointers to <code>T</code></li></ul><p>For example, if <code>map</code> was initialized like custom types, it&rsquo;d look something
+like the following (not valid code, obviously):</p><pre tabindex=0><code>m := map{
+	keyType: T,
+	elementType: T2,
+	... buckets, etc ...
+}
+</code></pre><p>Similarly, a <code>slice</code> would look something like:</p><pre tabindex=0><code>s := slice{
+	elementType: T,
+	len: int,
+	cap: int,
+	array: [len]T,
+}
+</code></pre><p>Note that <code>make</code> doesn&rsquo;t return a <em>pointer</em> to these types, but values.
+This is why, when appending to a slice, you must assign the value of
+<code>append</code> back to the value - eg <code>x = append(x, ...)</code>.</p><p>Channels and maps are even further special-cased. Maps, in particular,
+do not need to be reassigned - allocations are handled internally.</p><h3 id=new-vs-t>new vs &amp;T</h3><p>Use of <code>new</code> and <code>&amp;T{}</code> often confuse newcomers to Go. Which should be used,
+and why?</p><ul><li><code>new(T)</code> allocates a new <code>T</code>, zeroing out values, and returns a pointer to it.</li><li><code>&amp;T{}</code> allocates a new <code>T</code>, zeroing out values, and returns a pointer to it.</li></ul><p>Essentially, <code>new</code> and a literal <code>&amp;T{}</code> do the same thing. While <code>new</code> is a
+builtin, it offers no way to initialize members of <code>T</code> inline. It isn&rsquo;t
+necessarily wrong per-se, but most idiomatic Go tends to use <code>&amp;T{}</code> when
+additional initialization is required.</p><p>If your type has a useful zero value, <code>new(T)</code> is more than fine. For example,
+stdlib&rsquo;s <code>bytes.Buffer</code> is often created with <code>new(bytes.Buffer)</code> rather than
+<code>&amp;bytes.Buffer{}</code>, as the zero value can be used immediately.</p><p>A small benefit to <code>new</code> is that you can immediately call a method receiver on
+the type. I don&rsquo;t see this often, though.</p><h4 id=common-maket--gotcha>Common <code>make([]T, ...)</code> gotcha</h4><p><code>make(T, ...int)</code> is a simple function that allocates slices&rsquo; backing, maps,
+and channels. In the case of <code>slices</code>, the signature is
+<code>make([]T, length, capacity)</code>. One of the most common bugs is during initial
+creation of a slice followed by <code>append</code>.</p><pre tabindex=0><code>slice := make([]T, 10)
+
+for i := range x {
+	slice = append(slice, x[i])
+}
+</code></pre><p>In this case, the slice is created with 10 zero-val&rsquo;d <code>T</code>s. <code>append</code> ends up
+reallocating room for the elements in <code>x</code>, causing the slice to actually have a
+length of <code>10 + len(x)</code>, which in most cases is not what&rsquo;s actually desired -
+usually we&rsquo;re trying to eliminate the need for <code>append</code> to reallocate backing
+for the slice.</p><p>The appropriate way to do this is to set the <code>cap</code> of the slice, not the length:</p><p><code>make([]T, 0, 10)</code></p><p><code>length</code> specifies the initial number of <code>T</code> elements and <code>capacity</code> specifies
+the size of the underlying array used by the slice. Thus <code>capacity</code> may be
+greater than or equal to <code>length</code> but no less.</p><p>If the length of <code>x</code> is known at the time of the creation of the slice, and <code>i</code>
+is an integer, the following solution is also perfectly valid and clear:</p><pre tabindex=0><code>slice := make([]T, len(x))
+
+for i := range x {
+	slice[i] = x
+}
+</code></pre><p>I would say to prefer the latter as it is what you would expect to see in any
+other C-like.</p><h3 id=a-bit-about-interfaces>A bit about interfaces</h3><p>Go&rsquo;s interfaces are very powerful for
+preventing code from being tightly coupled. The stdlib contains a large amount
+of simple interfaces that are often ignored by new developers - who instead
+pass concrete types around where a simple interface would suffice. While there
+are some cases where interfaces should be avoided (hot paths), it is generally
+advised to use them until you have reason not to.</p><p>Accepting interfaces makes code clearer: to callers, it signals the intended use
+and enforces limits on what can be done. To illustrate this, here&rsquo;s a quick look at
+the <code>io</code> interfaces.</p><h3 id=ioreader-iowriter->io.Reader, io.Writer, &mldr;</h3><p>The <code>io</code> package has quite a few common interfaces for - you guessed it -
+handling input and output. Off the top of my head, I count 15. Certainly there
+are a few more that I can&rsquo;t remember.</p><p>The most popular are the obvious: <code>io.Reader</code> and <code>io.Writer</code>.</p><p><code>io.Reader</code> - specifies a <code>Read(dst []byte) (n int, e error)</code> method. The implementation
+of <code>Read</code> should read up to the length of the supplied byte slice and return the
+number of bytes read <em>and/or</em> an error. Emphasis on the &ldquo;and/or&rdquo;! Depending
+on the use case, it may be prudent to return <code>len(src)</code> as <code>n</code> while still returning
+an error - such as <code>io.EOF</code> to indicate the end of the source was reached.</p><p><code>io.Writer</code> - specifies a <code>Write(src []byte) (n int, e error)</code> method. The
+implementation of <code>Write</code> should write up to <code>len(src)</code> bytes and return an
+error if <code>len(src) != n</code>.</p><p>We&rsquo;ll examine <code>io.Writer</code> for a common use-case: serialization.
+For example, a simple type <code>SaveMe</code>.</p><pre tabindex=0><code>type SaveMe struct {
+	data []byte
+}
+</code></pre><p><code>SaveMe</code> is a boring type that just has an array of bytes in it.
+We don&rsquo;t need to do anything fancy except write these out to disk.</p><pre tabindex=0><code>func (s *SaveMe) Serialize(fp *os.File) error {
+	nbytes := uint8(len(s.data))
+	if n, err := fp.Write(byte(nbytes)); n != 1 || err != nil {
+		return errors.New(&#34;failed to write length of data&#34;)
+	}
+
+	n, err := fp.Write(s.data)
+	if n != len(data) {
+		return errors.New(&#34;short write&#34;)
+	}
+
+	return err
+}
+</code></pre><p>Doesn&rsquo;t look too bad, right? Let&rsquo;s write an accompanying test for <code>SaveMe</code>&rsquo;s
+serialization process.</p><pre tabindex=0><code>func TestSerializeToFile(t *testing.T) {
+	s := &amp;SaveMe{
+		data: []byte(&#34;i just wanna make sure this works :(&#34;),
+	}
+
+	f, err := os.OpenFile(&#34;/tmp/xyz&#34;, os.O_WRONLY|os.O_CREATE, 0777)
+	if err != nil {
+		t.Fatal(&#34;couldn&#39;t open file for testing&#34;)
+	}
+	defer f.Close()
+
+	err = s.Serialize(f)
+	if err != nil {
+		t.Fatalf(&#34;failed to serialize %v: %s&#34;, s, err)
+	}
+
+	f.Seek(0, os.SEEK_SET)
+	buf := make([]byte, 1 + len(s.data))
+	if _, err := f.Read(buf); err != nil {
+		t.Fatalf(&#34;couldn&#39;t read from file: %s&#34;, err)
+	}
+
+	if bytes.Compare(buf[1:], s.data) != 0 {
+		t.Fatal(&#34;read buf != s.data&#34;)
+	}
+}
+</code></pre><p>Alright, now we&rsquo;ve got a few extra lines to handle creation of a temporary file.
+And to close it. And to seek back to the beginning. And then to read the data
+out of it. Oops - we never deleted the file after the tests run, and neglected
+to use <code>os.O_TRUNC</code> to ensure the file is truncated. What if some other dumb test
+tries to write to <code>/tmp/xyz</code>? What if there&rsquo;s no writable disk at all?</p><p>New ticket comes in - you&rsquo;ve got to read and write this type over the network.
+Better just re-read that file and conn.Write it over! <code>/s</code>
+We also need to be able to present this as the body of an <code>*http.Response</code> now!
+Feature creep here we come!</p><pre tabindex=0><code>func (s *SaveMe) SerializeFile(*os.File) ...
+func (s *SaveMe) SerializeConn(net.Conn) ...
+func (s *SaveMe) SerializeHTTP(*http.Response) ...
+</code></pre><p>Nah. Good code is simple and eliminates repetition where reasonable, and we can
+actually just write a single method!</p><pre tabindex=0><code>func (s *SaveMe) WriteTo(w io.Writer) (int, error) {
+	n, err := w.Write(s.data)
+	if n != len(s.data) {
+		...
+	}
+
+	return err
+}
+</code></pre><p>In tests, we can drop the file requirement completely:</p><pre tabindex=0><code>func TestSerializeToWriter(t *testing.T) {
+	s := &amp;SaveMe{
+		data: []byte(&#34;i just wanna make sure this works :(&#34;),
+	}
+
+	buf := new(bytes.Buffer)
+	if err := s.WriteTo(buf); err != nil {
+		t.Fatalf(&#34;failed to write to buffer: %s&#34;, err)
+	}
+
+	dst := buf.Bytes()
+	if bytes.Compare(dst[1:], s.data) != 0 {
+		t.Fatal(&#34;buf != s.data&#34;)
+	}
+}
+</code></pre><p>Now - there&rsquo;s no file worries whatsoever and we still know that the contents
+of <code>SaveMe</code> make its way through - whether it&rsquo;s to disk, a bare network
+connection, whatever - sans destination-specific errors. (Side note: our
+implementation here also satisfies the <code>io.WriterTo</code> interface!)</p><h3 id=and-error-handling>&mldr;and Error Handling</h3><p>At this point, we&rsquo;ve got an abstract serialization method that doesn&rsquo;t care
+where it writes to, so long as it gets written. That&rsquo;s not the full story,
+though, is it? Inevitably, there will be errors. And the common Go meme
+of <code>if err != nil</code> rears its ugly head, here - what do we do about implementation
+specific errors?</p><p>To that, I say: it depends(TM).</p><p>If we&rsquo;re dealing with files, good luck. If we&rsquo;re dealing with a network
+connection - the other side may be able to understand the hiccup and allow for
+retransmission. If so, it doesn&rsquo;t seem like something our tiny little <code>SaveMe</code>
+should be responsible for, and rather should be the caller&rsquo;s job to handle.</p><p>The caller may have a <code>net.Conn</code>. It may not. If it doesn&rsquo;t, we can use type
+assertion to figure out that it was a network issue:</p><pre tabindex=0><code>if neterr, ok := err.(net.Error); ok {
+	// it&#39;s a net.Error, so use it&#39;s methods to see if we can retry.
+}
+</code></pre><p>The caller can also use their own interfaces to assert for behaviour, rather
+than a package-specific type. To do so, we&rsquo;d write our own interface for
+<code>net.Error</code>&rsquo;s Timeout check:</p><pre tabindex=0><code>type timeoutError interface {
+	Timeout() bool
+}
+
+if terr, ok := err.(timeoutError); ok &amp;&amp; terr.Timeout() {
+	// it&#39;s specifically a timeout, so wait and try again
+}
+</code></pre><p>The second case - being our own interface - allows us to test for a timeout
+scenario without implementing the full <code>net.Error</code> interface.</p><p>Not all cases will be so simple, but checking behaviour instead of specific
+types is exactly why we went with <code>io.Writer</code> for <code>SaveMe</code> in the first place.
+It signals how something is intended to be used and explicitly limits to that
+use.</p><h3 id=the-dreadedinterface>The Dreaded<code>interface{}</code></h3><p><code>interface{}</code> is an actual <em>interface</em> with no methods - hence why it is called
+the &ldquo;empty interface&rdquo;.</p><p>Because it has no methods specified, it can hold any type - struct, slice, map,
+you name it - it holds it.</p><p>One issue that comes to mind with the empty interface value is nil checks:</p><pre tabindex=0><code>func retinterface(b bool) interface{} {
+	type x struct {}
+
+	var ret *x
+
+	if b {
+		ret = &amp;x{}
+	}
+
+	return ret
+}
+</code></pre><ul><li>Call <code>retinterface(true)</code>. Is the return value nil? Nope!</li><li>Call <code>retinterface(false)</code>. Is the return value nil? Nope! Wait, what?</li></ul><p>What we&rsquo;re actually getting here is a nil pointer to an <code>x</code>. It&rsquo;s fairly
+obvious in hindsight, but common enough that it should be noted.</p><p>Instead of returning a nil <code>x</code>, we&rsquo;d want to do the following:</p><pre tabindex=0><code>func retinterface(b bool) interface{} {
+	type x struct {}
+
+	if !b {
+		return nil
+	}
+
+	return &amp;x{}
+}
+</code></pre><p>Which will properly return a bare <code>nil</code> rather than a nil ptr to an <code>x</code>.</p><p>Generally, <code>interface{}</code> is used by &ldquo;generic&rdquo; code that handles unknown types.
+<code>fmt</code>, <code>log</code>, <code>encoding/json</code>, &mldr; the list goes on. It has uses, but it should
+not be sprinkled around a codebase for ease of use.</p><p>Given the signature <code>func do(v interface{})</code>, we know <code>do</code> can <em>accept</em> any type
+of value, but not whether it can actually do anything with it. That, of course,
+depends on the implementation of <code>do</code>. Personally, not a big fan of this unless
+you&rsquo;re writing some ultra-generic library code. Let&rsquo;s hope Go contracts
+materialize into something useful.</p><p>There&rsquo;s not much else to say here other than &ldquo;avoid the empty interface where
+you can&rdquo;. Use an actual interface that describes what you need.</p><h3 id=fin>Fin</h3><p>;wq</p></div><div id=links><a class="basic-alignment left" href=https://chrsm.org/2018/09/05/docker-compose-go/>&#171; Docker, Compose, Go</a>
+<a class="basic-alignment left" href=https://chrsm.org/2020/02/11/streaming-from-obs-to-rtmp-server-for-recording/>Streaming from OBS to RTMP server for recording &#187;</a></div></section></body></html>
