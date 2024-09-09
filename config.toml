@@ -12,7 +12,7 @@ disableHugoGeneratorInject = true
 
 [[menu.main]]
     name = "~/about"
-    url = "/about"
+    url = "/about/"
 
 [[menu.main]]
     name = "~/"
